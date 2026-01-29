@@ -19,3 +19,8 @@
 !*.yml
 !*.json
 !*.pdf
+!*.png
+!*.jpg
+!*.jpeg
+!*.gif
+!*.svg
