@@ -1,0 +1,91 @@
+name: Publish Report Release
+
+# Kích hoạt: push tag (v*) và chạy thủ công (workflow_dispatch)
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+# Cần quyền ghi để tạo Release
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # --- Kiểm tra cơ bản (sanity checks) ---------------------------------
+      # Đổi biến ROOT_TEX nếu file gốc (entry) không phải là main.tex
+      - name: Determine root file
+        id: root
+        run: |
+          ROOT_TEX=${ROOT_TEX:-main.tex}
+          echo "root=${ROOT_TEX}" >> "$GITHUB_OUTPUT"
+
+      - name: Kiểm tra cơ bản (tồn tại file gốc .tex và tài nguyên)
+        run: |
+          set -euo pipefail
+          root="${{ steps.root.outputs.root }}"
+          test -f "$root" || { echo "ERROR: root file '$root' not found"; exit 1; }
+          # Kiểm tra tuỳ chọn tài nguyên — chỉnh theo nhu cầu dự án
+          [ -f figures/fpt-logo.png ] || echo "NOTE: figures/fpt-logo.png missing (skipping)"
+          [ -f refs/references.bib ] || echo "NOTE: refs/references.bib missing (skipping)"
+
+      # --- Biên dịch -------------------------------------------------------
+      # Dùng action LaTeX được duy trì, đã kèm TeX Live.
+      # Để đổi file gốc, đặt biến môi trường ROOT_TEX hoặc đổi root_file bên dưới.
+      - name: Compile PDF with latexmk (XeLaTeX)
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: ${{ steps.root.outputs.root }}
+          latexmk_use_xelatex: true
+          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+
+      - name: Gom PDF thành Report.pdf
+        id: collect
+        run: |
+          set -euo pipefail
+          root="${{ steps.root.outputs.root }}"
+          pdf_basename="${root%.tex}.pdf"
+          if [ ! -f "$pdf_basename" ]; then
+            echo "ERROR: expected PDF '$pdf_basename' not found"
+            ls -la
+            exit 1
+          fi
+          cp -f "$pdf_basename" Report.pdf
+          echo "pdf=Report.pdf" >> "$GITHUB_OUTPUT"
+
+      # Tuỳ chọn: lưu artifact để tải nhanh từ trang run
+      - name: Upload artifact (Report.pdf)
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf-artifacts
+          path: Report.pdf
+          if-no-files-found: error
+
+      # --- Tạo Release -----------------------------------------------------
+      # Tag phát hành lấy từ sự kiện push (refs/tags/vX.Y.Z).
+      # Để đổi file gốc, đặt ROOT_TEX hoặc sửa các bước ở trên.
+      - name: Tạo GitHub Release và đính kèm Report.pdf
+        uses: softprops/action-gh-release@v2
+        with:
+          # Dùng tên tag hiện tại (ví dụ v1.0.0)
+          tag_name: ${{ github.ref_name }}
+          files: ${{ steps.collect.outputs.pdf }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Ghi chú cho các ae:
+      # - Đổi entry bằng cách đặt ROOT_TEX hoặc sửa bước "Determine root file"
+      #   và/hoặc tham số root_file ở trên.
+      # - Tên file release cố định là Report.pdf theo yêu cầu.
+      # - Workflow sẽ fail tự động khi biên dịch thất bại.

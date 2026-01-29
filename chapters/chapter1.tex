@@ -1,0 +1,155 @@
+% !TeX root = ../main.tex
+\chapter{INTRODUCTION}
+
+\section{Project Information}
+\begin{itemize}
+	\item \textbf{Project Name:} Integrating Large Language Models (LLM) Into Web-Based Cyber Range for Automated Security Analysis and Training.
+	\item \textbf{Project Code:} SP26IA01
+	\item \textbf{Group Name:} GSP26IA01
+	\item \textbf{Project Type:} Security Laboratory
+	\item \textbf{Timeline:} 01/2026 -- 04/2026
+\end{itemize}
+
+\section{Participation}
+
+\subsection{Supervisor}
+\renewcommand{\arraystretch}{1.3}
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{\textwidth}{|c|l|c|>{\raggedright\arraybackslash}X|c|}
+		\hline
+		\textbf{No.} & \textbf{Full Name} & \textbf{Phone} & \textbf{E-mail} & \textbf{Role} \\
+		\hline
+		01 & Mai Hoàng Đỉnh & 0933459100 & \url{dinh.mh@fe.edu.vn} & Supervisor \\
+		\hline
+	\end{tabularx}
+	\caption{Supervisor's information}
+\end{table}
+
+\subsection{Team Members}
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{\textwidth}{|c|l|c|c|>{\raggedright\arraybackslash}X|c|}
+		\hline
+		\textbf{No.} & \textbf{Full Name} & \textbf{Code} & \textbf{Phone} & \textbf{E-mail} & \textbf{Role} \\
+		\hline
+		01 & Huỳnh Ngọc Quang & SE181838 & 0935410902 & \url{quanghnse181838@fpt.edu.vn} & Leader \\
+		\hline
+		02 & Nguyễn Văn Nhân & SE183547 & 0938046119 & \url{nhannvse183547@fpt.edu.vn} & Member \\
+		\hline
+		03 & Trương Mỹ Vy & SE184728 & 0784098813 & \url{vytmse184728@fpt.edu.vn} & Member \\
+		\hline
+		04 & Hồ Tài Liên Vy Kha & SE182749 & 0386783066 & \url{khahtlvse182749@fpt.edu.vn} & Member \\
+		\hline
+	\end{tabularx}
+	\caption{Team's information}
+\end{table}
+
+\section{Project Background}
+
+\subsection{Cyber Range Training Landscape}
+In recent years, the global cybersecurity landscape has witnessed a significant escalation in both the frequency and sophistication of cyberattacks. Advanced Persistent Threats (APTs), ransomware campaigns, insider threats, and supply chain attacks are becoming increasingly prevalent. As a result, organizations face increasing pressure to equip their cybersecurity staff and professionals with practical skills that go beyond theoretical knowledge.
+
+Traditional cybersecurity education methods such as classroom lectures, lab exercises, and capture-the-flag competitions (CTFs) are often insufficient to prepare analysts for real-world environments. These approaches often lack practicality, system complexity, and continuous feedback mechanisms. Consequently, learners may struggle when faced with real-world incidents in operational Security Operations Centers (SOCs).
+
+Cyber-range environments have been created as a solution to this challenge. A cyber-range environment is an isolated environment that simulates real-world IT infrastructure, including networks, servers, endpoints, and security monitoring systems. In this environment, trainees can safely practice attack and defense techniques, analyze attack behavior, and implement incident response procedures without jeopardizing production systems.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{\detokenize{images/figure 1-1.png}}
+	\caption{General overview of a web-based cyber range training environment.}
+\end{figure}
+
+This figure illustrates the interaction between attackers, defenders, simulation infrastructure, and monitoring components, highlighting the comprehensive nature of cybersecurity training platforms.
+
+\subsection{Limitation of Current SOC Training Approaches}
+Although cyberattack simulation platforms offer many advantages, many existing Security Operations Center (SOC) training solutions still have significant limitations. A major problem is the reliance on static and predefined scenarios. In such systems, trainees follow pre-programmed steps without adapting to individual decision-making or errors.
+
+Additionally, SOC analysts often have to manually examine a large volume of logs, alerts, and network traffic. This manual analysis process is time-consuming and requires significant cognitive effort, especially for entry-level analysts. Alert fatigue further exacerbates this problem, leading to missed detections and delayed responses.
+
+From an educational perspective, current training systems rarely provide real-time explanations or contextual feedback. Learners may identify an alert as malicious without fully understanding the underlying attack techniques, affected assets, or appropriate mitigation strategies.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{\detokenize{images/figure 1-2.png}}
+	\caption{Traditional SOC workflow with manual log analysis.}
+\end{figure}
+
+\subsection{Role of LLMs in Cybersecurity Education}
+Large-scale language models (LLMs) have demonstrated superior capabilities in natural language processing, inference, and contextual understanding. In cybersecurity education, these capabilities can be leveraged to enhance both learning outcomes and operational efficiency.
+
+When integrated into a cybersecurity training environment, LLMs can automatically analyze security logs, link events, and generate human-friendly explanations of complex attack behaviors. For example, an LLM can explain why a network connection sequence shows lateral movement or how specific command-line operations relate to known MITRE ATT\&CK techniques.
+
+Furthermore, LLMs can act as intelligent instructors by providing hints, answering learner questions, and tailoring explanations based on user performance. This adaptive feedback mechanism supports personalized learning and bridges the gap between theoretical concepts and practical applications. It is important to note that LLMs are not intended to replace human analysts. Instead, they act as cognitive assistants that enhance the analyst's capabilities, reduce repetitive workloads, and accelerate skill acquisition.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{\detokenize{images/figure 1-3.jpg}}
+	\caption{Large language models (LLM).}
+\end{figure}
+
+\subsection{Problem Statement}
+Despite the growing adoption of cyber range platforms in cybersecurity education and SOC training programs, many existing solutions still fail to fully address the practical and cognitive challenges faced by security analysts. Most current cyber range systems primarily emphasize infrastructure simulation, focusing on the deployment of virtual machines, networks, and attack targets, while providing limited support for analytical reasoning and contextual understanding during training exercises.
+
+In traditional SOC training environments, trainees are often required to manually examine large volumes of security logs, alerts, and system events generated during simulated attacks. This process demands a high level of experience and domain knowledge, which novice analysts typically lack. As a result, trainees may struggle to correlate security events, identify attack patterns, and understand the underlying causes of detected anomalies. This difficulty often leads to inefficient learning and reduced training effectiveness.
+
+Furthermore, many training platforms rely on static attack scenarios and predefined workflows. Such approaches do not adequately represent the dynamic and evolving nature of real-world cyber threats, where analysts must continuously adapt their investigation strategies and decision-making processes. The absence of real-time guidance and adaptive feedback mechanisms further limits the ability of trainees to develop critical analytical skills.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{images/figure\space\space 1-4.png}
+	\caption{Challenges in traditional SOC training environments.}
+\end{figure}
+
+Although large language models (LLMs) have demonstrated powerful capabilities in interpreting logs, inferring, and explaining in natural language, their integration into cyberattack simulation training environments remains limited and largely unexplored. Consequently, a clear gap currently exists in cybersecurity training solutions: the absence of an intelligent, adaptive, and interactive mechanism that can assist trainees in understanding attack behavior, linking security events, and improving decision-making skills in a SOC-like environment.
+
+\subsection{Scope of the Research}
+
+\subsubsection{Technical Scope}
+From a technical standpoint, this research is strictly limited to web-based security analysis within a Cyber Range environment. The system focuses on the collection and analysis of security logs generated from web application traffic, particularly at the reverse proxy and Web Application Firewall (WAF) layers.
+
+The primary data source analyzed in this project consists of HTTP request and response logs, including request methods, URLs, parameters, headers, payloads, and WAF-generated alerts. These logs are used to simulate realistic SOC workflows related to web application attack detection and analysis.
+
+The scope explicitly excludes other cybersecurity domains that are not directly observable through HTTP-level telemetry. In particular, the project does not address endpoint security, malware detection, binary exploitation, host-based intrusion detection, or Endpoint Detection and Response (EDR) systems. Network-layer intrusion detection mechanisms outside the context of web traffic analysis are also considered outside the scope of this study.
+
+\subsubsection{Artificial Intelligence Scope}
+The use of artificial intelligence in this research is deliberately constrained to an assistive analytical role within a simulated SOC training environment. Large Language Models (LLMs) are employed to support the interpretation, correlation, and explanation of security events derived from web-based logs and alerts.
+
+The LLM is designed to provide contextual insights, human-readable explanations, and guidance that help learners understand attack patterns and defensive mechanisms. It functions as a cognitive support tool rather than an autonomous decision-maker.
+
+This research does not involve training, fine-tuning, or modifying machine learning or language models. Pre-trained, API-based LLM services are utilized without any form of custom model development. Additionally, the system does not implement automated counter-attacks, autonomous remediation actions, or self-adaptive offensive behaviors. The LLM does not replace human SOC analysts; instead, it complements their analytical process by reducing cognitive load and enhancing situational understanding.
+
+\subsubsection{Training Scope}
+From an educational perspective, the proposed Cyber Range platform is intended exclusively for training and learning purposes. The primary target users of the system are undergraduate cybersecurity students, trainees, and junior-level SOC analysts who are in the early stages of developing practical security analysis skills.
+
+The main objective of the platform is to facilitate hands-on learning by providing guided analysis and clear explanations of web-based attacks and defensive responses. Emphasis is placed on improving conceptual understanding, analytical reasoning, and familiarity with SOC-style workflows rather than achieving operational efficiency.
+
+The system is not designed for deployment in real-world enterprise SOC environments. Production-level concerns such as regulatory compliance, large-scale incident response automation, and organizational security governance are not addressed within the scope of this research.
+
+\subsubsection{Out-of-Scope Considerations}
+Several aspects related to advanced cybersecurity operations are intentionally excluded from this study to maintain focus and feasibility. These include, but are not limited to, fully autonomous AI-driven attacker systems, real-time automated defense or response mechanisms, model retraining based on live feedback, and long-term adversarial robustness evaluation.
+
+While the concept of intelligent attack-defense co-evolution is acknowledged as a promising research direction, its implementation is considered future work and is not part of the current project deliverables. The scope of this research is confined to the design, implementation, and initial academic evaluation of an LLM-assisted Cyber Range platform within a controlled educational environment.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{\detokenize{images/figure1-5.pdf}}
+	\caption{Flowchart of Project.}
+	\label{fig:flowchart}
+\end{figure}
+
+\subsection{Research Objectives}
+The main objectives of this research are as follows:
+\begin{itemize}
+	\item To design a scalable web-based cyber range architecture that supports isolated multi-user training environments.
+	\item To deploy and integrate core security components (WAF, SIEM, reverse proxy, attacker machines) into a unified training platform.
+	\item To build a centralized logging and monitoring system capable of collecting security events from multiple user stacks.
+	\item To integrate Large Language Models (LLMs) for automated analysis and explanation of security events and alerts.
+	\item To develop a clientless access mechanism that allows users to interact with training environments securely via a web browser.
+	\item To evaluate the effectiveness of LLM-assisted training in improving:
+	\begin{itemize}
+		\item Attack detection accuracy
+		\item Incident analysis speed
+		\item Conceptual understanding of security incidents
+	\end{itemize}
+\end{itemize}

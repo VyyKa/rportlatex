@@ -1,0 +1,329 @@
+% !TeX root = ../main.tex
+\chapter{PROJECT MANAGEMENT PLAN}
+
+\section{Problem Setting}
+
+\subsection{Name of Capstone Project}
+\textbf{English:} Integrating Large Language Models (LLM) Into Web-Based Cyber Range for Automated Security Analysis and Training.
+
+\textbf{Vietnamese:} Tích hợp các mô hình ngôn ngữ lớn (LLM) vào Cyber Range dựa trên web để phân tích và đào tạo bảo mật tự động.
+
+\subsection{Problem Abstraction}
+At an abstract level, this project addresses a fundamental limitation in current cybersecurity training platforms: the imbalance between infrastructure simulation and analytical skill development. Most existing Cyber Range environments prioritize the deployment of virtual machines, vulnerable services, and attack tools. While these environments successfully replicate technical infrastructures, they often fail to adequately support the cognitive and analytical processes required in real-world Security Operations Centers (SOCs).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{\detokenize{images/figure 2-1.png}}
+	\caption{Skill Development to Application of Skills}
+\end{figure}
+
+In operational SOC environments, analysts are expected to interpret vast volumes of heterogeneous security data, including web server logs, firewall alerts, intrusion detection events, and system-level audit trails. These data sources are typically fragmented, noisy, and context dependent. Novice analysts frequently struggle to correlate isolated alerts into coherent attack narratives, resulting in delayed responses and superficial understanding.
+
+From an educational perspective, this challenge can be abstracted as the difficulty of transforming raw, low-level security telemetry into structured, explainable knowledge that supports learning and decision-making. The proposed project conceptualizes this problem through a three-layer abstraction model:
+\begin{itemize}
+	\item \textbf{Security Data Generation Layer:} Simulated attack and defense activities executed within isolated Cyber Range environments.
+	\item \textbf{Security Data Aggregation and Correlation Layer:} Centralized logging, Web Application Firewall (WAF), reverse proxy, and SIEM components responsible for collecting and correlating events.
+	\item \textbf{Intelligent Assistance Layer:} Large Language Models used to analyze correlated events and provide natural-language explanations, insights, and guidance.
+\end{itemize}
+
+\subsection{Project Overview}
+
+\subsubsection{The Current Situation}
+In recent years, hands-on, scenario-based cybersecurity training has become an essential requirement for both educational institutions and professional training programs. Despite this shift, many existing training environments continue to exhibit several persistent limitations. First, the volume of logs and alerts generated in simulated attacks often overwhelms learners at the basic level. Second, most platforms offer limited real-time feedback, forcing learners to rely on instructors or post-exercise assessments to understand their mistakes. Finally, the scalability of instructor-led instruction is inherently limited, especially in large classes or self-paced learning settings.
+
+These factors combined reduce training effectiveness and hinder the development of independent analytical skills in learners.
+
+\subsubsection{Boundaries of the Solution}
+To address the identified limitations, this project proposes the development of a Web-Based LLM-Augmented Cyber Range. In the proposed architecture, each user is provisioned with an isolated training environment, referred to as a user stack. Each user stack includes a vulnerable web application, a reverse proxy, a Web Application Firewall (WAF), and an attacker machine. All security events generated within these environments are centrally collected and processed by a Security Information and Event Management (SIEM) system.
+
+A Large Language Model is integrated as an intelligent SOC assistant within the platform. Its primary function is to analyze selected security events and alerts, generate human-readable explanations of attack behaviors, and provide context-aware guidance on investigation and mitigation strategies. This approach transforms the Cyber Range from a passive simulation environment into an interactive, guided learning system.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{\detokenize{images/structure.pdf}}
+	\caption{Proposed infrastructure architecture of the cyber range platform.}
+	\label{fig:infra-arch}
+\end{figure}
+
+
+\subsubsection{Project Environment}
+\begin{table}[H]
+	\centering
+	\begingroup
+	\setlength{\tabcolsep}{2pt}
+	\renewcommand{\arraystretch}{1.1}
+	\small
+	\begin{tabularx}{\textwidth}{|p{0.7cm}|p{2.9cm}|p{1.0cm}|p{1.0cm}|p{1.2cm}|X|p{1.3cm}|}
+		\hline
+		\textbf{No.} & \textbf{OS} & \textbf{CPU} & \textbf{RAM} & \textbf{Storage} & \textbf{Purpose} & \textbf{Quantity} \\
+		\hline
+		01 & Alpine Linux & 1 core & 0.5 GB & 4 GB & Router, Firewall, DHCP Server for internal VLAN routing and traffic control & 1 \\
+		\hline
+		02 & Ubuntu Server 22.04 LTS & 2 cores & 2 GB & 100 GB & Management \& DMZ node hosting Traefik Reverse Proxy, Apache Guacamole, and AI Engine services & 1 \\
+		\hline
+		03 & Ubuntu Server 22.04 LTS & 10 cores & 8 GB & 60 GB & Centralized SIEM server (Wazuh) for log collection, correlation, and monitoring & 1 \\
+		\hline
+		04 & Ubuntu Server 22.04 LTS & 4 cores & 6 GB & 30 GB & User training stack including Web Target, nginx Reverse Proxy, WAF (ModSecurity), and attacker machine & 1 (per user) \\
+		\hline
+		05 & Ubuntu Server 22.04 LTS & 2 cores & 2 GB & 20 GB & Additional internal services for testing, log forwarding, and system integration validation & 1 \\
+		\hline
+		06 & Proxmox VE Host & 13 cores & 10.5 GB & 74 GB & Virtualization host managing all virtual machines and isolated Cyber Range environments & 1 \\
+		\hline
+	\end{tabularx}
+	\endgroup
+	\caption{Development environment}
+\end{table}
+\FloatBarrier
+
+\section{Project Organization}
+
+\subsection{Solution Process Model}
+The project follows an iterative and incremental development model combined with the Scrum framework. This approach was chosen to meet changing requirements, minimize technical risks from the outset, and ensure continuous validation of design decisions. Scrum allows the project team to break down complex development tasks into manageable sprints, each producing verifiable products.
+
+At a high level, the system's operational process unfolds as follows: Users access the platform through a web-based dashboard and connect to their designated environment via Apache Guacamole, providing secure access without the need for client-side software installation. Attack and defense operations are performed in isolated user stacks, generating logs from the WAF, reverse proxy, and host operating system. These logs are aggregated and correlated by the SIEM system. The selected events are then forwarded to the LLM analysis module, which generates contextual interpretations and recommendations for the trainee.
+
+\clearpage
+\subsection{Roles and Responsibilities}
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{|p{2.6cm}|p{3.2cm}|p{3cm}|p{5.4cm}|}
+	\hline
+	\textbf{Phase} & \textbf{Full Name} & \textbf{Role} & \textbf{Responsibility} \\
+	\hline
+	\endfirsthead
+	\hline
+	\textbf{Phase} & \textbf{Full Name} & \textbf{Role} & \textbf{Responsibility} \\
+	\hline
+	\endhead
+
+	Initiating & Huỳnh Ngọc Quang & Project Leader & Define project objectives, scope, and overall research direction. Propose the system architecture for the LLM-augmented Cyber Range. Coordinate initial discussions with the supervisor and align technical goals with academic requirements. \\
+	\hline
+	Initiating & Nguyễn Văn Nhân & Infrastructure Architect & Analyze infrastructure requirements and design the virtualized Cyber Range environment. Define VLAN segmentation, routing strategy, and core services including SIEM, WAF, and reverse proxy. \\
+	\hline
+	Initiating & Trương Mỹ Vy & AI Researcher & Conduct background research on Large Language Models and their applications in cybersecurity education. Identify feasible LLM use cases for automated security analysis and training assistance. \\
+	\hline
+	Initiating & Hồ Tài Liên Vy Kha & AI Building and Documentation Coordinator & Conduct initial research on the application of LLMs in cybersecurity training environments. Prepare the initial project proposal, outline report structure, and ensure compliance with capstone documentation standards. \\
+	\hline
+	Planning & Huỳnh Ngọc Quang & Project Leader & Decompose project objectives into detailed sprint-level tasks and milestones. Define technical deliverables, evaluation criteria, and integration checkpoints. Coordinate planning activities to ensure alignment between infrastructure, AI research, and documentation workstreams. \\
+	\hline
+	Planning & Nguyễn Văn Nhân & Infrastructure Engineer & Design the detailed infrastructure deployment plan, including Proxmox virtualization layout, VLAN segmentation, routing strategy, and resource allocation. Plan scalability for multi-user Cyber Range environments and ensure isolation between user stacks. \\
+	\hline
+	Planning & Trương Mỹ Vy & AI Researcher & Design the AI-assisted security analysis workflow, focusing on how security events and logs are transformed into structured inputs for LLM processing. Define research hypotheses related to AI effectiveness in cybersecurity training. \\
+	\hline
+	Planning & Hồ Tài Liên Vy Kha & AI Building and Documentation Coordinator & Plan the AI implementation architecture using the Dify platform for LLM orchestration. Design the AI interaction flow between SIEM outputs and the web-based dashboard. Prepare detailed documentation outlines and reporting templates. \\
+	\hline
+	Executing & Huỳnh Ngọc Quang & Infrastructure Engineer & Oversee system implementation progress and coordinate integration between infrastructure components, AI services, and the dashboard. Validate intermediate deliverables and ensure adherence to the planned timeline. \\
+	\hline
+	Executing & Nguyễn Văn Nhân & Infrastructure Engineer & Deploy and configure Cyber Range infrastructure components, including the Alpine-based router, DMZ services, SIEM server, reverse proxies, WAF, and isolated user stacks. Ensure network stability, secure access, and proper log forwarding. \\
+	\hline
+	Executing & Trương Mỹ Vy & AI Researcher & Conduct experimental evaluation of AI-assisted security analysis. Test different prompt strategies and analyze the quality, accuracy, and usefulness of LLM-generated explanations within training scenarios. \\
+	\hline
+	Executing & Hồ Tài Liên Vy Kha & AI Building and Documentation Coordinator & Implement AI pipelines using the Dify platform to orchestrate LLM workflows. Integrate AI-generated outputs into the web-based user interface. Continuously update technical documentation based on implementation progress. \\
+	\hline
+	Deployment & Huỳnh Ngọc Quang & Project Leader & Coordinate system deployment and conduct end-to-end integration validation. Prepare demonstration scenarios and training use cases for evaluation and project defense. \\
+	\hline
+	Deployment & Nguyễn Văn Nhân & Infrastructure Engineer & Optimize system performance, validate VLAN isolation, and ensure secure clientless access through Apache Guacamole. Monitor system stability under simulated user load. \\
+	\hline
+	Deployment & Trương Mỹ Vy & AI Researcher & Evaluate the effectiveness of AI-assisted analysis in realistic training scenarios. Identify limitations, failure cases, and opportunities for improvement in AI explanations. \\
+	\hline
+	Deployment & Hồ Tài Liên Vy Kha & AI Building and Documentation Coordinator & Validate the integration between the Dify-based AI workflows and the frontend dashboard. Conduct usability testing to ensure AI outputs are clearly presented and understandable for trainees. \\
+	\hline
+	Closing & Huỳnh Ngọc Quang & Project Leader & Compile the final project report, summarize technical and research outcomes, and coordinate final presentation and defense activities. \\
+	\hline
+	Closing & Nguyễn Văn Nhân & Infrastructure Engineer & Support final system verification and assisyt in technical explanation during project evaluation and defense. \\
+	\hline
+	Closing & Trương Mỹ Vy & AI Researcher & Document research findings, experimental results, and identified limitations of AI-assisted security analysis. Propose future research directions, including autonomous AI attacker extensions. \\
+	\hline
+	Closing & Hồ Tài Liên Vy Kha & AI Building and Documentation Coordinator & Finalize system documentation, AI workflow descriptions (Dify-based), and user guides. Ensure consistency between implemented features and academic deliverables. \\
+	\hline
+	\caption{Team role and responsibilities each phase} \\
+\end{longtable}
+
+\subsection{Tools and Techniques}
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{|c|p{3.0cm}|p{3.0cm}|p{2.2cm}|p{5.0cm}|}
+	\hline
+	\textbf{No.} & \textbf{Tools} & \textbf{Category} & \textbf{Version} & \textbf{Description} \\
+	\hline
+	\endfirsthead
+	\hline
+	\textbf{No.} & \textbf{Tools} & \textbf{Category} & \textbf{Version} & \textbf{Description} \\
+	\hline
+	\endhead
+	01 & Proxmox VE & Virtualization Platform & 8.x & Used as the primary virtualization platform to host and manage virtual machines and containers for the Cyber Range infrastructure. \\
+	\hline
+	02 & Ubuntu Server & Operating System & 22.04 LTS & Deployed on most servers to ensure stability, security, and compatibility with SIEM, WAF, and AI components. \\
+	\hline
+	03 & Alpine Linux & Operating System & 3.x & Lightweight Linux distribution used for the router, firewall, and DHCP server to minimize resource usage and attack surface. \\
+	\hline
+	04 & Docker & Containerization & 24.x & Enables containerized deployment of services such as web targets, reverse proxies, and AI modules for consistency and scalability. \\
+	\hline
+	05 & Traefik & Reverse Proxy & 2.x & Acts as an edge reverse proxy in the DMZ to manage incoming traffic and route requests to internal services securely. \\
+	\hline
+	06 & Nginx & Web Server / Reverse Proxy & 1.24.x & Used as a reverse proxy in user stacks to forward traffic to vulnerable web applications such as DVWA and OWASP Juice Shop, integrated with ModSecurity WAF rules. \\
+	\hline
+	07 & ModSecurity & Web Application Firewall & 3.x & Provides web application firewall capabilities to detect and block common web-based attacks during training scenarios. \\
+	\hline
+	08 & Wazuh & SIEM Platform & 4.x & Centralized log collection, correlation, and alerting system used for security monitoring and analysis. \\
+	\hline
+	09 & Apache Guacamole & Remote Access Gateway & 1.5.x & Provides secure, clientless access (RDP/SSH) to internal machines via a web browser for trainees. \\
+	\hline
+	10 & Large Language Model (LLM) API & Artificial Intelligence & API-based & Used to analyze correlated security events and generate human-readable explanations and training guidance. \\
+	\hline
+	11 & Python & Programming Language & 3.10 & Used to implement backend services, AI integration logic, and automation scripts. \\
+	\hline
+	12 & Git & Version Control & Latest & Used for source code management, collaboration, and tracking changes throughout the project lifecycle. \\
+	\hline
+	13 & JavaScript & Frontend Development & ES6+ & Used to develop the web-based dashboard and user interface for interacting with the Cyber Range and AI outputs. \\
+	\hline
+	14 & HTML5 / CSS3 & Frontend Technologies & HTML5 / CSS3 & Provides structure and styling for the dashboard, ensuring usability and responsive design. \\
+	\hline
+	15 & Damn Vulnerable Web Application (DVWA) & Vulnerable Web Application & Latest & Intentionally vulnerable PHP/MySQL web application used to simulate common web attacks such as SQL Injection, XSS, and CSRF for training purposes. \\
+	\hline
+	16 & OWASP Juice Shop & Vulnerable Web Application & Latest & Modern intentionally vulnerable web application used to simulate real-world web security issues based on the OWASP Top 10. \\
+	\hline
+	\caption{Tools and techniques used in project.} \\
+\end{longtable}
+
+\section{Project Management Plan}
+
+\subsection{Tasks}
+The project can be divided into several major phases, each further decomposed into a set of minor tasks and distributed across multiple development sprints. Each sprint represents an intensive work cycle aimed at delivering specific outcomes, thereby ensuring steady progress, effective coordination, and continuous validation throughout the project lifecycle.
+
+\subsubsection{Sprint 01: Requirements Analysis and Initial System Design}
+During this sprint, the team focuses on gathering, analyzing, and formalizing the project requirements. The objective is to establish a solid conceptual and technical foundation for the LLM-augmented Cyber Range. This sprint emphasizes understanding the attack surface, defining training objectives, and designing the initial system architecture.
+
+The responsibilities in this sprint include the following:
+\begin{itemize}
+	\item Collecting and documenting functional and non-functional requirements for the Cyber Range platform.
+	\item Analyzing the target attack surface and defining the scope of web-based attack and defense scenarios.
+	\item Designing the high-level system architecture, including virtualization, network segmentation, SIEM integration, and AI-assisted analysis components.
+	\item Selecting core tools and technologies such as Proxmox, Docker, Wazuh, ModSecurity, Apache Guacamole, and the Dify platform for LLM orchestration.
+	\item Preparing initial architectural diagrams and validating the design with the project supervisor.
+\end{itemize}
+
+\subsubsection{Sprint 02: Infrastructure Deployment and Network Configuration}
+The second sprint focuses on deploying the foundational infrastructure of the Cyber Range environment. This sprint translates the architectural design into a functional virtualized system capable of supporting isolated training environments.
+
+The responsibilities in this sprint include the following:
+\begin{itemize}
+	\item Deploying the Proxmox virtualization platform and provisioning virtual machines and containers.
+	\item Configuring VLAN-based network segmentation to isolate management, user stacks, and internal services.
+	\item Deploying and configuring the Alpine-based router, including firewall rules and DHCP services.
+	\item Setting up the DMZ environment and internal switching components.
+	\item Configuring secure clientless access using Apache Guacamole.
+	\item Verifying network isolation, routing correctness, and controlled internet access.
+\end{itemize}
+
+\subsubsection{Sprint 03: Security Services Integration and Log Management}
+Sprint 03 focuses on integrating security mechanisms and centralized log management into the Cyber Range. The goal of this sprint is to generate realistic security events and establish a SOC-style monitoring pipeline.
+
+The responsibilities in this sprint include the following:
+\begin{itemize}
+	\item Deploying vulnerable web applications such as DVWA and OWASP Juice Shop within isolated user stacks.
+	\item Configuring nginx as a reverse proxy and integrating ModSecurity as a Web Application Firewall.
+	\item Executing controlled attack and defense scenarios to generate security logs.
+	\item Deploying and configuring the Wazuh SIEM platform for centralized log collection, normalization, and correlation.
+	\item Creating alert rules and dashboards to support security monitoring and analysis.
+	\item Validating the end-to-end log flow from user stacks to the SIEM system.
+\end{itemize}
+
+\subsubsection{Sprint 04: LLM Integration and AI-Assisted Security Analysis}
+Sprint 04 is dedicated to integrating artificial intelligence into the Cyber Range. This sprint introduces LLM-based analysis to transform raw security data into contextual, human-readable insights for training purposes.
+
+The responsibilities in this sprint include the following:
+\begin{itemize}
+	\item Designing AI workflows using the Dify platform to orchestrate Large Language Model interactions.
+	\item Defining structured inputs for AI analysis based on SIEM alerts and correlated events.
+	\item Developing prompt strategies for automated attack explanation and security analysis.
+	\item Integrating AI-generated outputs into the web-based dashboard.
+	\item Evaluating the accuracy, relevance, and usefulness of AI-assisted explanations in training scenarios.
+	\item Refining AI interaction logic based on experimental feedback.
+\end{itemize}
+
+\subsubsection{Sprint 05: System Validation, Evaluation, and Documentation}
+The final sprint focuses on validating the complete system, evaluating its effectiveness, and finalizing project documentation. This sprint ensures that all components operate cohesively and that project outcomes are clearly documented.
+
+The responsibilities in this sprint include the following:
+\begin{itemize}
+	\item Conducting end-to-end system testing across infrastructure, security services, AI modules, and the user interface.
+	\item Evaluating system performance, stability, and usability under simulated training conditions.
+	\item Assessing the effectiveness of AI-assisted analysis in supporting cybersecurity training.
+	\item Finalizing technical documentation, system descriptions, and experimental results.
+	\item Documenting system limitations and proposing future enhancements, including autonomous AI-driven attacker modules.
+	\item Preparing the final report and materials for project presentation and defense.
+\end{itemize}
+
+\subsection{Task Sheet: Assignments and Timetable}
+\begingroup
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.1}
+\small
+\begin{longtable}{|p{3.3cm}|p{2.6cm}|p{2.0cm}|p{1.8cm}|p{4.8cm}|}
+	\hline
+	\textbf{Task} & \textbf{Assigned To} & \textbf{Estimated Duration} & \textbf{Deadline} & \textbf{Description} \\
+	\hline
+	\endfirsthead
+	\hline
+	\textbf{Task} & \textbf{Assigned To} & \textbf{Estimated Duration} & \textbf{Deadline} & \textbf{Description} \\
+	\hline
+	\endhead
+	Project planning and scope definition & Huỳnh Ngọc Quang & 1 week & Week 1 & Define project objectives, scope, deliverables, and success criteria for the CyberRange system. \\
+	\hline
+	CyberRange environment setup & Nguyễn Văn Nhân & 2 weeks & Weeks 2 & Deploy isolated CyberRange stacks including vulnerable web applications and supporting services. \\
+	\hline
+	Research on web attack patterns & Trương Mỹ Vy & 1 week & Weeks 2 & Study common web attacks (SQLi, XSS, LFI, SSRF, etc.) and their characteristics in HTTP logs. \\
+	\hline
+	AI preprocessing module development & Hồ Tài Liên Vy Kha & 2 weeks & Week 2 & Implement multi-layer preprocessing logic to classify attacks and reduce LLM invocation. \\
+	\hline
+	System architecture design & Huỳnh Ngọc Quang & 1 week & Week 3 & Design the overall CyberRange architecture, including attacker, defender, WAF, SIEM, Dashboard and AI workflow components. \\
+	\hline
+	WAF and reverse proxy configuration & Nguyễn Văn Nhân & 1 week & Week 3 & Configure ModSecurity and reverse proxy to inspect and filter incoming HTTP traffic. \\
+	\hline
+	AI detection methodology design & Trương Mỹ Vy & 1 week & Week 3 & Propose AI-based detection approaches combining rule-based, heuristic, and LLM-assisted analysis. \\
+	\hline
+	LLM integration and workflow implementation & Hồ Tài Liên Vy Kha & 1 week & Week 3 & Integrate LLM into the analysis pipeline for handling uncertain or complex attack cases. \\
+	\hline
+	Risk management and progress tracking & Huỳnh Ngọc Quang & Continuous & Throughout project & Identify project risks, track progress, and adjust plans to ensure project stability. \\
+	\hline
+	Attack simulation environment & Nguyễn Văn Nhân & 1 week & Week 4 & Set up attacker machines and tools to generate realistic attack traffic for testing. \\
+	\hline
+	Attack-Defense evaluation metrics & Trương Mỹ Vy & 1 week & Week 5 & Define metrics to measure success of AI attacks versus AI defenses. \\
+	\hline
+	Attack-Defense feedback loop & Hồ Tài Liên Vy Kha & 1 week & Week 6 & Integrate attack results as feedback to refine defensive AI rules and logic. \\
+	\hline
+	Final integration review and validation & Huỳnh Ngọc Quang & 1 week & Week 7 & Validate system integration, ensure all components work cohesively, and prepare for final defense. \\
+	\hline
+	Infrastructure optimization and stability testing & Nguyễn Văn Nhân & 1 week & Week 8 & Optimize performance, ensure isolation between users, and maintain system stability. \\
+	\hline
+	AI workflow improvement suggestions & Trương Mỹ Vy & Continuous & Throughout project & Propose improvements to reduce unnecessary LLM usage while maintaining accuracy. \\
+	\hline
+	Documentation of attack scenarios & Hồ Tài Liên Vy Kha & Continuous & Throughout project & Document attack strategies, payloads, and evaluation results in the final report. \\
+	\hline
+	\caption{Assignment Task sheet} \\
+\end{longtable}
+\endgroup
+
+\subsection{Meeting Minutes}
+\begin{table}[!htbp]
+	\centering
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Subject} & SP26IA01 \\
+		\hline
+		\textbf{Instructor} & Mr. Mai Hoàng Đỉnh \\
+		\hline
+		\textbf{Location} & FPT HCM Campus\\
+		\hline
+		\textbf{Attendees} & Huỳnh Ngọc Quang (SE181838), Nguyễn Văn Nhân (SE183547), Trương Mỹ Vy (SE184728), Hồ Tài Liên Vy Kha (SE173290) \\
+		\hline
+		\textbf{Absence} &  \\
+		\hline
+		\textbf{Date} & 01/2026 -- 4/2026 \\
+		\hline
+		\textbf{Time} & 09:30 A.M -- 11:30 A.M every Monday \\
+		\hline
+	\end{tabularx}
+	\caption{Meeting minute}
+\end{table}

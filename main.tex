@@ -1,0 +1,65 @@
+% !TEX program = xelatex
+\documentclass[english,12pt,a4paper]{report}
+% \usepackage[T1]{fontenc}
+% \usepackage{babel}
+\usepackage[english]{babel}
+\usepackage[left=3cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[hidelinks]{hyperref}
+\renewcommand{\UrlFont}{\rmfamily}
+% --- Support Vietnamese ---
+% (XeLaTeX/LuaLaTeX không dùng inputenc)
+% \usepackage[utf8]{inputenc}
+% \usepackage{vntex}
+% \usepackage{lmodern}
+% mathptmx xung đột với fontspec
+% \usepackage{mathptmx}
+% --- new ---
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes} % Dùng font có sẵn trong Windows
+
+% --- GÓI HỖ TRỢ BẢNG BIỂU & HÌNH ẢNH ---
+\usepackage{graphicx}       % Chèn ảnh
+\usepackage{float}          % Cố định vị trí ảnh
+\usepackage{placeins}       % \FloatBarrier to prevent floats crossing sections
+\usepackage{array}          % Căn chỉnh bảng
+\usepackage{longtable}      % Bảng dài qua trang (quan trọng cho Task Sheet)
+\usepackage{caption}        % Chú thích đẹp hơn
+\captionsetup[table]{position=bottom}
+\usepackage{multirow}
+\usepackage{tabularx}
+
+% --- 4. CẤU HÌNH HIỂN THỊ CODE ---
+\usepackage{listings}
+\usepackage{xcolor}
+
+% --- PARAGRAPH / SPACING ---
+\usepackage{indentfirst} % thụt lề cả đoạn đầu sau tiêu đề
+\setlength{\parindent}{1.2cm}
+\setlength{\parskip}{0pt}
+\usepackage{setspace}
+\onehalfspacing
+
+% --- THÔNG TIN FILE ---
+\title{INTEGRATING LARGE LANGUAGE MODELS (LLM) INTO WEB-BASED CYBER RANGE}
+\author{Huynh Ngoc Quang et al.}
+
+
+\begin{document}
+	% 1. PHẦN ĐẦU (Trang bìa, Lời cảm ơn, Mục lục)
+	\include{front/titlepage}
+	\include{front/acknowledgement}
+	
+	\tableofcontents
+	\listoffigures
+	\listoftables
+	
+	% 2. PHẦN NỘI DUNG CHÍNH (Các chương)
+	% Tôi chia nhỏ ra để bạn dễ viết
+	\include{chapters/chapter1}
+	\include{chapters/chapter2}
+	\include{chapters/chapter3}
+	\include{chapters/chapter4}
+	% \include{chapters/chapter5} % Bỏ comment khi bạn viết chương 5
+\end{document}
